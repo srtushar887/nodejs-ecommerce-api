@@ -13,7 +13,7 @@ app.use(cors());
 app.options('*',cors());
 
 //middleware
-app.use(express.json());
+app.use(express.json({extended : false }));
 app.use(morgan('tiny'));
 
 
