@@ -2,19 +2,21 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authJwt = require('./helpers/jwt');
 require('dotenv/config');
-
 
 
 const app = express();
 const api = process.env.API_URL;
 
 app.use(cors());
-app.options('*',cors());
+app.options('*', cors());
 
 //middleware
-app.use(express.json({extended : false }));
+app.use(express.json({extended: false}));
 app.use(morgan('tiny'));
+app.use(authJwt());
+
 
 
 //routers
@@ -23,25 +25,24 @@ const productsRouter = require('./routers/products');
 const usersRouter = require('./routers/users');
 const ordersRouter = require('./routers/orders');
 
-app.use(`${api}/categories`,categoriesRouter);
-app.use(`${api}/products`,productsRouter);
-app.use(`${api}/users`,usersRouter);
-app.use(`${api}/orders`,ordersRouter);
+
+app.use(`${api}/categories`, categoriesRouter);
+app.use(`${api}/products`, productsRouter);
+app.use(`${api}/users`, usersRouter);
+app.use(`${api}/orders`, ordersRouter);
 
 
 //database
-mongoose.connect(process.env.CONNECTION_STRINGH,{
-    useNewUrlParser : true,
-    useUnifiedTopology:true,
-    dbName:'esho-database',
-})
-.then(()=>{
+mongoose.connect(process.env.CONNECTION_STRINGH, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
     console.log('Database Connected');
-}).catch((err)=>{
-    console.log(err+'Database Not Connected');
-})
+}).catch((err) => {
+    console.log(err + 'Database Not Connected');
+});
 
 
-app.listen(3000,()=>{
+app.listen(3000, () => {
     console.log(`Server is running on port 3000`);
 })

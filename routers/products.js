@@ -3,6 +3,7 @@ const { Category } = require('../models/category');
 const router = express.Router();
 const {Product} = require('../models/product');
 const mongoose = require('mongoose');
+const authJwt = require('../helpers/jwt');
 
 
 router.get(`/`,async (req,res)=>{
@@ -48,12 +49,12 @@ router.post(`/`,async (req,res)=>{
             isFeatured : req.body.isFeatured,
         });
 
-        product = await saveproduct.save();
-        if(!product){
+        saveproduct = await saveproduct.save();
+        if(!saveproduct){
             return res.status(400).json({msg:'The product can not be created'});
         }
 
-        return res.send(product);
+        return res.send(saveproduct);
     }catch(e){
 
     }
